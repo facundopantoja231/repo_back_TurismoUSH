@@ -18,7 +18,7 @@ const con = mysql.createConnection({
 const port = 3001
 
 app.get("/", (req, res) => {
-    res.send("Hello World!")
+    res.send("Turismo Ushuaia")
 })
 
 app.post("/register", (req, res) => {
@@ -32,7 +32,7 @@ app.post("/register", (req, res) => {
         if(result) {
             res.send(result);
         }else{
-            res.send({message: "Ingresa los detalles adecuados!"})
+            res.send({message: "Ingresa los registros faltantes!"})
         }
     })
 })
@@ -56,5 +56,5 @@ app.post("/login", (req,res) => {
 })
 
 app.listen(port, () => {
-    console.log(`On port ${port}`)
+    console.log(`Conexión exitosa en el puerto ${port}`)
 })
