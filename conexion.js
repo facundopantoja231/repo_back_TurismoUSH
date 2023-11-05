@@ -1,4 +1,8 @@
+// importación de mySQL
+
 const mysql = require("mysql");
+
+// conexión a la base de datos
 
 const conexion = mysql.createConnection({
     user: "root",
@@ -8,5 +12,7 @@ const conexion = mysql.createConnection({
 })
 
 conexion.connect();
+
+// habilitar exportacion de archivo
 
 module.exports = conexion;
