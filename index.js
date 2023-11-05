@@ -15,7 +15,7 @@ const con = mysql.createConnection({
     database: "turismo_ush"
 })
 
-const port = 3001
+const port = 3003
 
 app.get("/", (req, res) => {
     res.send("Turismo Ushuaia")
