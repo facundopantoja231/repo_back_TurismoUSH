@@ -7,6 +7,17 @@ const conexion = require("../conexion")
 
 const routerExcursiones = express.Router()
 
+routerExcursiones.get("/", (req, res) => {
+  
+    conexion.query("SELECT * FROM excursiones", (err, result) => {
+      if (err) {
+        console.error("Error al obtener datos de excursiones:", err);
+        res.status(500).json({ error: "Error al obtener datos de excursiones" });
+      } else {
+        res.status(200).json(result); // Devuelve los datos de excursiones en formato JSON
+      }
+    });
+  });
 
 routerExcursiones.post("/", (req, res) => { 
 
