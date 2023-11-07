@@ -8,6 +8,17 @@ const conexion = require("../conexion")
 const routerUsers = express.Router()
 
 
+routerUsers.get("/", (req, res) => {
+    conexion.query("SELECT * FROM usuarios", (err, result) => {
+        if (err) {
+          console.error("Error al obtener datos de los usuarios:", err);
+          res.status(500).json({ error: "Error al obtener datos de restaurantes" });
+        } else {
+          res.status(200).json(result); // Devuelve los datos de usuarios en formato JSON
+        }
+      });
+});
+
 // metodo POST para guardar los valores nombre, apellido, correoElectronico, nombreUsuario, contraseña en la base de datos
 
 routerUsers.post("/register", (req, res) => {
@@ -19,7 +30,6 @@ routerUsers.post("/register", (req, res) => {
     const correoElectronico = req.body.correoElectronico;
     const nombreUsuario = req.body.nombreUsuario;
     const contraseña = req.body.contraseña;
-
 
 // definición de sentencia SQL 
 

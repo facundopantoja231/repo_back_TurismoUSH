@@ -19,7 +19,7 @@ app.use("/api/excursiones", routerExcursiones);
 // mensaje
 
 app.get("/", (req,res) => {
-    res.send("Mi primer server!")
+    res.send("Turismo Ushuaia")
 })
 
 // definición de puerto de conexión
