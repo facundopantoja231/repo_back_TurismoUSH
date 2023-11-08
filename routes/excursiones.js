@@ -28,15 +28,25 @@ routerExcursiones.post("/", (req, res) => {
     const cupos = req.body.cupos;
 
     conexion.query("INSERT INTO excursiones (excursion, descripcion_exc, precio, urlImagen_exc, cupos) VALUES (?, ?, ?, ?, ?)", [excursion, descripcion_exc, precio, urlImagen_exc, cupos], (err, result) => {
-        if(result) {
-            res.send(result);
-        }else{
-            res.send({message: "Ingresa los registros faltantes!"})
+        if(err) {
+            console.log(err);
+            res.json({status: "error", err})
+        } else {
+        
+            if(result) {
+
+                // en caso de que no se presenten errores, se procede a el envio de datos al servidor
+
+                res.send(result);
+            }else{
+
+                // en caso de faltar valores, el mensaje sera...
+
+                res.send({message: "Ingresa los registros faltantes!"})
+            }
         }
     })
-
-
-})
+    })
 
 
 

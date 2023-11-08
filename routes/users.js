@@ -12,7 +12,7 @@ routerUsers.get("/", (req, res) => {
     conexion.query("SELECT * FROM usuarios", (err, result) => {
         if (err) {
           console.error("Error al obtener datos de los usuarios:", err);
-          res.status(500).json({ error: "Error al obtener datos de restaurantes" });
+          res.status(500).json({ error: "Error al obtener datos de usuarios" });
         } else {
           res.status(200).json(result); // Devuelve los datos de usuarios en formato JSON
         }
@@ -34,16 +34,22 @@ routerUsers.post("/register", (req, res) => {
 // definición de sentencia SQL 
 
     conexion.query("INSERT INTO usuarios (nombre, apellido, correoElectronico, nombreUsuario, contraseña) VALUES (?, ?, ?, ?, ?)", [nombre, apellido, correoElectronico, nombreUsuario, contraseña], (err, result) => {
-        if(result) {
+        if(err) {
+            console.log(err);
+            res.json({status: "error", err})
+        } else {
+        
+            if(result) {
 
-            // en caso de que no se presenten errores, se procede a el envio de datos al servidor
+                // en caso de que no se presenten errores, se procede a el envio de datos al servidor
 
-            res.send(result);
-        }else{
+                res.send(result);
+            }else{
 
-            // en caso de faltar valores, el mensaje sera...
+                // en caso de faltar valores, el mensaje sera...
 
-            res.send({message: "Ingresa los registros faltantes!"})
+                res.send({message: "Ingresa los registros faltantes!"})
+            }
         }
     })
   })
