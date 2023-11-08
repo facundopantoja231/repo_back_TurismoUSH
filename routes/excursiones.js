@@ -40,6 +40,6 @@ routerExcursiones.post("/", (req, res) => {
 
 
 
-// exportamos routersRestaurants para mostrarlo y ejecutarlo desde app.js
+// exportamos routersExcursiones para mostrarlo y ejecutarlo desde app.js
 
 module.exports = routerExcursiones;

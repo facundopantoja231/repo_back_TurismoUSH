@@ -24,7 +24,7 @@ app.get("/", (req,res) => {
 
 // definición de puerto de conexión
 
-const port = 3002;
+const port = 3306;
 
 // mensaje si la conexión al puerto es exitosa
 
