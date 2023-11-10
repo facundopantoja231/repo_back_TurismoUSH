@@ -9,13 +9,14 @@ const cors = require("cors");
 const routerUsers = require("./routes/users.js");
 const routerRestaurants = require("./routes/restaurants.js");
 const routerExcursiones = require("./routes/excursiones.js");
+const routerHoteles = require("./routes/hoteles.js");
 
 app.use(cors());
 app.use(express.json());
 app.use("/api/users", routerUsers);
 app.use("/api/restaurants", routerRestaurants);
 app.use("/api/excursiones", routerExcursiones);
-
+app.use("/api/hoteles", routerHoteles);
 // mensaje
 
 app.get("/", (req,res) => {
