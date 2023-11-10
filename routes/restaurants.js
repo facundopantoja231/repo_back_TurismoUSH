@@ -19,6 +19,26 @@ routerRestaurants.get("/", (req, res) => {
     });
   });
 
+  routerRestaurants.get('/:id', (req, res) => {
+    const id = req.params.id;
+  
+    // Realizar una consulta SQL para recuperar registros por ID
+    const sql = 'SELECT * FROM restaurantes WHERE id = ?'; // Reemplaza "tu_tabla" con el nombre de tu tabla.
+    
+    conexion.query(sql, [id], (err, results) => {
+      if (err) {
+        console.error('Error al obtener datos por ID:', err);
+        res.status(500).json({ error: 'Error al obtener datos por ID' });
+      } else {
+        if (results.length === 0) {
+          res.status(404).json({ message: 'No se encontraron registros con el ID proporcionado' });
+        } else {
+          res.status(200).json(results);
+        }
+      }
+    });
+  });
+
 
 routerRestaurants.post("/", (req, res) => { 
 

@@ -54,6 +54,15 @@ routerUsers.post("/register", (req, res) => {
     })
   })
 
+
+  function generarRandom() {
+    return(Math.random().toString(36).substring(2));
+  }
+
+  function generarToken() {
+    return(generarRandom()+generarRandom());
+  }
+
   // metodo POST para comprobar el inicio de sesión de un usuario registrado en la base de datos
 
   routerUsers.post("/login", (req,res) => {
@@ -70,12 +79,12 @@ routerUsers.post("/register", (req, res) => {
         if(err){
             req.setEncoding({err: err});
         }else{
-            if(result.length > 0) {
-
+            if(result.length === 1) {
+                const token = generarToken()
                 // si los valores ingresados, coinciden con los de la base de datos, se envia el result (se inicia sesión en el front-end y carga el componente HOME)
 
                 res.send(result);
-            
+                
             }else{
 
                 // en caso de haber un error, se mostrara en pantalla el error (por lo general sera que el usuario o contraseña es incorrecto o no existe en la base de datos)
