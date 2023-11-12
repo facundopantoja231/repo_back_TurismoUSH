@@ -7,6 +7,26 @@ const conexion = require("../conexion")
 
 const routerExcursiones = express.Router()
 
+routerExcursiones.get("/:excursionId", (req, res) => {
+  const excursionId = req.params.excursionId;
+
+  conexion.query("SELECT * FROM excursiones WHERE id = ?", [excursionId], (err, result) => {
+    if (err) {
+      console.error(`Error al obtener detalles de la excursión ${excursionId}`, err);
+      res.status(500).json({ error: `Error al obtener detalles de la excursión ${excursionId}` });
+    } else {
+      if (result.length === 0) {
+        // Si no se encuentra ninguna excursión con el ID proporcionado, devolver un 404
+        res.status(404).json({ error: "Excursión no encontrada" });
+      } else {
+        // Devuelve los detalles de la excursión en formato JSON
+        res.status(200).json(result[0]);
+      }
+    }
+  });
+});
+
+
 routerExcursiones.get("/", (req, res) => {
   
     conexion.query("SELECT * FROM excursiones", (err, result) => {
