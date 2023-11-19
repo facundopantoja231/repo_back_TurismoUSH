@@ -39,15 +39,24 @@ routerExcursiones.get("/", (req, res) => {
     });
   });
 
-routerExcursiones.post("/", (req, res) => { 
+routerExcursiones.post("/create-exc", (req, res) => { 
 
     const excursion = req.body.excursion;
     const descripcion_exc = req.body.descripcion_exc;
     const precio = req.body.precio;
     const urlImagen_exc = req.body.urlImagen_exc;
     const cupos = req.body.cupos;
+    const horarios = req.body.horarios;
+    const duracion = req.body.duracion;
+    const dificultad = req.body.dificultad;
+    const idioma = req.body.idioma;
+    const traslados = req.body.traslados;
+    const disponible = req.body.disponible;
+    const ambiente = req.body.ambiente;
+    const forma_de_pago = req.body.forma_de_pago;
+    const minimo_de_participantes = req.body.minimo_de_participantes;
 
-    conexion.query("INSERT INTO excursiones (excursion, descripcion_exc, precio, urlImagen_exc, cupos) VALUES (?, ?, ?, ?, ?)", [excursion, descripcion_exc, precio, urlImagen_exc, cupos], (err, result) => {
+    conexion.query("INSERT INTO excursiones (excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes], (err, result) => {
         if(err) {
             console.log(err);
             res.json({status: "error", err})
@@ -65,6 +74,44 @@ routerExcursiones.post("/", (req, res) => {
                 res.send({message: "Ingresa los registros faltantes!"})
             }
         }
+    })
+    })
+
+routerExcursiones.put("/modify-exc", (req, res) => {
+      const id = req.body.id;
+      const excursion = req.body.excursion;
+      const descripcion_exc = req.body.descripcion_exc;
+      const precio = req.body.precio;
+      const urlImagen_exc = req.body.urlImagen_exc;
+      const cupos = req.body.cupos;
+      const horarios = req.body.horarios;
+      const duracion = req.body.duracion;
+      const dificultad = req.body.dificultad;
+      const idioma = req.body.idioma;
+      const traslados = req.body.traslados;
+      const disponible = req.body.disponible;
+      const ambiente = req.body.ambiente;
+      const forma_de_pago = req.body.forma_de_pago;
+      const minimo_de_participantes = req.body.minimo_de_participantes;
+    
+      conexion.query("UPDATE excursiones SET excursion=?, descripcion_exc=?, precio=?, urlImagen_exc=?, cupos=?, horarios=?, duracion=?, dificultad=?, idioma=?, traslados=?, disponible=?, ambiente=?, forma_de_pago=?, minimo_de_participantes=? WHERE id=?", [excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes, id], (err, result) => {
+        if(result) {
+          res.send("Excursion actualizado con exito");
+        }else{
+          res.send({message: "Ingresa los registros faltantes!", err})
+      }
+      })
+    })
+
+routerExcursiones.delete("/delete-exc/:id", (req, res) => {
+    const id = req.params.id;
+    
+    conexion.query("DELETE FROM excursiones WHERE id=?", id, (err, result) => {
+      if(err) {
+        console.log(err)
+      } else {
+        res.send(result)
+      }
     })
     })
 

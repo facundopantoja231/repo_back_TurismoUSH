@@ -16,8 +16,9 @@ routerReservas.post("/", (req, res) => {
     const correo_electronico = req.body.correo_electronico;
     const telefono = req.body.telefono;
     const id_excursion = req.body.id_excursion;
+    const disponibles = req.body.disponibles;
 
-    conexion.query("INSERT INTO reservas (nombre, apellido, correo_electronico, telefono, id_excursion) VALUES (?, ?, ?, ?, ?)", [nombre, apellido, correo_electronico, telefono, id_excursion], (err, result) => {
+    conexion.query("INSERT INTO reservas (nombre, apellido, correo_electronico, telefono, id_excursion, disponibles) VALUES (?, ?, ?, ?, ?, ?)", [nombre, apellido, correo_electronico, telefono, id_excursion, disponibles], (err, result) => {
         if(err) {
             console.log(err);
             res.json({status: "error", err})
@@ -36,7 +37,6 @@ routerReservas.post("/", (req, res) => {
             }
         }
     })
-
 
 })
 
