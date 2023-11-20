@@ -1,18 +1,12 @@
-// importación de mySQL
+const mysql = require("mysql"); // Importación de mySQL
 
-const mysql = require("mysql");
-
-// conexión a la base de datos
-
-const conexion = mysql.createConnection({
-    user: "carrascos",
-    host: "ctpoba.ar",
-    password: "45875420",
-    database: "72_B"
+const conexion = mysql.createConnection({ // Creamos una constante que va a contener la conexión a la bd
+    user: "carrascos", // User de nuestra bd
+    host: "ctpoba.ar", // Host de nuestra bd
+    password: "45875420", // Password de nuestra bd
+    database: "72_B" // Pombre de nuestra bd
 })
 
-conexion.connect();
+conexion.connect(); // Realizamos la conexión a la base de datos
 
-// habilitar exportacion de archivo
-
-module.exports = conexion;
+module.exports = conexion; // Permite que podamos usar conexión en los demas archivos.

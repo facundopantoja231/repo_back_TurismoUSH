@@ -1,48 +1,36 @@
-// importacion de express y de conexión.js (la base de datos de turismo ushuaia)
+const express = require("express") // Importamos express
+const conexion = require("../conexion") // Importamos conexion (la bd)
 
-const express = require("express")
-const conexion = require("../conexion")
+const routerReservas = express.Router() // declaramos la ruta routerReservas. En app dijimos que es /api/reservas
 
-// importacion del router Usuarios
 
-const routerReservas = express.Router()
+routerReservas.post("/", (req, res) => { // Solicitud POST a la direccion / de routerReservas
+// Queda "http://localhost:3202/api/reservas/"
 
-// Enviar reserva 
+    const nombre = req.body.nombre; // Creamos una constante "nombre" que contiene el valor obtenido desde el frontend
+    const apellido = req.body.apellido; // Idem "apellido"
+    const correo_electronico = req.body.correo_electronico; // Idem "correo_electronico"
+    const telefono = req.body.telefono; // Idem "telefono"
+    const id_excursion = req.body.id_excursion; // Idem "id_excursion"
+    const disponibles = req.body.disponibles; // Idem "disponibles"
 
-routerReservas.post("/", (req, res) => { 
-
-    const nombre = req.body.nombre;
-    const apellido = req.body.apellido;
-    const correo_electronico = req.body.correo_electronico;
-    const telefono = req.body.telefono;
-    const id_excursion = req.body.id_excursion;
-    const disponibles = req.body.disponibles;
-
+    // Le pedimos a la bd que inserte en la tabla reservas los valores declarados anteriormente
     conexion.query("INSERT INTO reservas (nombre, apellido, correo_electronico, telefono, id_excursion, disponibles) VALUES (?, ?, ?, ?, ?, ?)", [nombre, apellido, correo_electronico, telefono, id_excursion, disponibles], (err, result) => {
-        if(err) {
-            console.log(err);
-            res.json({status: "error", err})
-        } else {
         
-            if(result) {
-
-                // en caso de que no se presenten errores, se procede a el envio de datos al servidor
-
-                res.send(result);
-            }else{
-
-                // en caso de faltar valores, el mensaje sera...
-
-                res.send({message: "Ingresa los registros faltantes!"})
-            }
+        // Si hay errores....
+        if(err) {
+            console.log(err); // Muestra en consola el error
+        } 
+        
+        // Si no hay errores....
+        else {
+            res.send(result); // Inserta los datos en la bd
         }
     })
 
 })
 
-// exportamos routersRestaurants para mostrarlo y ejecutarlo desde app.js
-
-module.exports = routerReservas;
+module.exports = routerReservas; // Permite que podamos usar routerReservas en los demas archivos.
 
 
 

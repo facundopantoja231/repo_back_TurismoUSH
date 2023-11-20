@@ -1,101 +1,90 @@
-// importacion de express y de conexión.js (la base de datos de turismo ushuaia)
+const express = require("express") // Importamos express
+const conexion = require("../conexion") // Importamos conexion (la bd)
+const jwt = require("jsonwebtoken") // Importamos JsonWebToken para crear el token
 
-const express = require("express")
-const conexion = require("../conexion")
-
-// importacion del router Usuarios
-
-const routerUsers = express.Router()
+const routerUsers = express.Router() // declaramos la ruta routerUsers. En app dijimos que es /api/users
 
 
-routerUsers.get("/", (req, res) => {
+routerUsers.get("/", (req, res) => { // Solicitud GET a la ruta principal de routerUsers
+
+    // Le pedimos a la bd todos los registros de la tabla usuarios
     conexion.query("SELECT * FROM usuarios", (err, result) => {
+        
+        // Si hay un error.......
         if (err) {
-          console.error("Error al obtener datos de los usuarios:", err);
-          res.status(500).json({ error: "Error al obtener datos de usuarios" });
-        } else {
-          res.status(200).json(result); // Devuelve los datos de usuarios en formato JSON
+            console.error(err); // Muestra en consola el error
+            res.status(500).json({ error: "Error al obtener datos de usuarios" }); // Status 500 (server error)
+        } 
+        // Si no hay errores......
+        else {
+            res.status(200).json(result);  // enviamos los datos en formato JSON con status 200 (solicitud exitosa)
         }
-      });
+    });
 });
 
-// metodo POST para guardar los valores nombre, apellido, correoElectronico, nombreUsuario, contraseña en la base de datos
 
-routerUsers.post("/register", (req, res) => {
+routerUsers.post("/register", (req, res) => { // Solicitud POST a la ruta /register de routerUsers
+// Queda como "http://localhost:3202/api/users/register"
 
-// declaramos en constantes los valores a registrar
+    const nombre = req.body.nombre; // Guardamos en la constante "nombre" el valor obtenido desde el frontend
+    const apellido = req.body.apellido; // Idem "apellido"
+    const correoElectronico = req.body.correoElectronico; // Idem "correoElectronico"
+    const nombreUsuario = req.body.nombreUsuario; // Idem "nombreUsuario"
+    const contraseña = req.body.contraseña; // Idem "contraseña"
+    
+    // Le pedimos a la bd insertar en la tabla usuarios los valores que declaramos anteriormente
+    // El campo role siempre va a ser 'user'
 
-    const nombre = req.body.nombre;
-    const apellido = req.body.apellido;
-    const correoElectronico = req.body.correoElectronico;
-    const nombreUsuario = req.body.nombreUsuario;
-    const contraseña = req.body.contraseña;
-
-// definición de sentencia SQL 
-
-    conexion.query("INSERT INTO usuarios (nombre, apellido, correoElectronico, nombreUsuario, contraseña) VALUES (?, ?, ?, ?, ?)", [nombre, apellido, correoElectronico, nombreUsuario, contraseña], (err, result) => {
-        if(err) {
-            console.log(err);
-            res.json({status: "error", err})
-        } else {
+    conexion.query("INSERT INTO usuarios (nombre, apellido, correoElectronico, nombreUsuario, contraseña, role) VALUES (?, ?, ?, ?, ?, ?)", [nombre, apellido, correoElectronico, nombreUsuario, contraseña, 'user'], (err, result) => {
         
-            if(result) {
-
-                // en caso de que no se presenten errores, se procede a el envio de datos al servidor
-
-                res.send(result);
-            }else{
-
-                // en caso de faltar valores, el mensaje sera...
-
-                res.send({message: "Ingresa los registros faltantes!"})
-            }
+        // Si hubo un error al insertar los datos........
+        if(err) {
+            console.log(err); // Muestra en consola el error
+            res.status(500).json({ error: "Error al obtener datos de usuarios" }); // Status 500 (server error)
+        } 
+        
+        // Si no hubo errores........
+        else {
+            res.send(result) // Enviamos los datos a la BD
         }
     })
-  })
+})
 
 
-  function generarRandom() {
-    return(Math.random().toString(36).substring(2));
-  }
+routerUsers.post("/login", (req,res) => { // Solicitud POST a la ruta /login de routerUsers
+// Queda como "http://localhost:3202/api/users/login"
 
-  function generarToken() {
-    return(generarRandom()+generarRandom());
-  }
+    const nombreUsuario = req.body.nombreUsuario; // Guardamos en la constante "nombreUsuario" el valor obtenido desde el frontend
+    const contraseña = req.body.contraseña; // Idem "contraseña"
 
-  // metodo POST para comprobar el inicio de sesión de un usuario registrado en la base de datos
-
-  routerUsers.post("/login", (req,res) => {
-
-// declaramos en constantes los valores que ya se encuentran en la base de datos y se procedera a realizar la validación de usuario
-
-    const nombreUsuario = req.body.nombreUsuario;
-    const contraseña = req.body.contraseña;
-  
-
-// sentencia SQL que comprobara la existencia de los valores ingresados en la base de datos
-
+    // Le pedimos a la bd que traiga todos datos si el usuario y contraseña coinciden con los que ingreso el usuario desde el frontend
     conexion.query("SELECT * FROM usuarios WHERE nombreUsuario = ? AND contraseña = ?", [nombreUsuario, contraseña], (err, result) => {
-        if(err){
-            req.setEncoding({err: err});
-        }else{
-            if(result.length === 1) {
-                const token = generarToken()
-                // si los valores ingresados, coinciden con los de la base de datos, se envia el result (se inicia sesión en el front-end y carga el componente HOME)
-
-                res.send(result);
-                
-            }else{
-
-                // en caso de haber un error, se mostrara en pantalla el error (por lo general sera que el usuario o contraseña es incorrecto o no existe en la base de datos)
-                
-                res.send({message: "Error en el usuario o contraseña!"})
             
-            }
+    // Si hay errores......
+    if(err) {
+        console.log(err); // Muestra en consola el error
+        res.status(500).json({ error: "Error al obtener datos de usuarios" }); // Status 500 (server error)
+    }
+     
+    // Si los valores de la bd coinciden con los del usuario.....
+    if(result.length === 1) {
+        const tokenValores = { // Creamos una constante tokenValores que contiene el nombreUsuario y role
+            nombreUsuario: result[0].nombreUsuario,
+            role: result[0].role,
         }
+            const token = jwt.sign( tokenValores, "Stack", { // Creamos el token y le pasamos tokenValores
+                // el token encriptara los valores nombreUsuario y role ya que son los q pasamos en tokenValores
+                expiresIn: "30m" // Aclaramos que el token expirará en 30 minutos.
+            })
+            res.send( {token} ) // Enviamos el token como objeto
+        }
+        
+    // Si los valores de la bd no coinciden con los del usuario.......    
+    else{ 
+        console.log("Error de usuario") // Mostramos en consola este mensaje
+    }
     })
-  })
+})
 
-// exportamos routersUsers para mostrarlo y ejecutarlo desde app.js
 
-module.exports = routerUsers;
+module.exports = routerUsers; // Permite que podamos usar routerUsers en los demas archivos.

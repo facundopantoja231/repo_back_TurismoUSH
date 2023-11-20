@@ -1,27 +1,31 @@
-// importacion de express y de conexión.js (la base de datos de turismo ushuaia)
+const express = require("express") // Importamos express
+const conexion = require("../conexion") // Importamos conexion (la bd)
 
-const express = require("express")
-const conexion = require("../conexion")
+const routerHoteles = express.Router() // declaramos la ruta routerRestaurants. En app dijimos que es /api/hoteles
 
-// importacion del router hoteles
-
-const routerHoteles = express.Router()
-
+// Solicitud GET en la dirección /table-hotel (Queda como http://localhost:3202/api/hoteles/table-hotel)
 routerHoteles.get("/table-hotel", (req, res) => {
-  
-    conexion.query("SELECT * FROM hoteles", (err, result) => {
-      if (err) {
-        console.error("Error al obtener datos de hoteles:", err);
-        res.status(500).json({ error: "Error al obtener datos de hoteles" });
-      } else {
-        res.status(200).json(result); // Devuelve los datos de hoteles en formato JSON
-      }
-    });
-  });
 
+  // Le pedimos a la db que obtenga todos los registros de la tabla hoteles
+  conexion.query("SELECT * FROM hoteles", (err, result) => {
+
+    // Si hay un error......
+    if (err) {
+      console.error(err); // Lo muestra en consola
+      res.status(500).json({ error: "Error al obtener datos de hoteles" }); // Status 500 (server error)
+    } 
+    
+    // Si no hay errores......
+    else {
+      res.status(200).json(result); // Devuelve los datos de hoteles en formato JSON con status 200 (envio exitoso)
+    }
+  });
+});
+
+// Solicitud POST en la direccion /create-hotel (Queda como http://localhost:3202/api/hoteles/create-table)
 routerHoteles.post("/create-hotel", (req, res) => { 
 
-    const nombre_hotel= req.body.nombre_hotel;
+    const nombre_hotel= req.body.nombre_hotel; 
     const descripcion_hotel = req.body.descripcion_hotel;
     const direccion_hotel = req.body.direccion_hotel;
     const url_hotel = req.body.url_hotel;

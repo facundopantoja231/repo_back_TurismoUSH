@@ -1,36 +1,29 @@
-// Importación de express y cors
+const express = require("express"); // Importamos express
+const app = express(); // Declaramos app como una instancia de express 
+const cors = require("cors"); // Importamos cors para permitir solicitudes HTTP entre dominios
 
-const express = require("express");
-const app = express();
-const cors = require("cors");
+const routerUsers = require("./routes/users.js"); // Importamos la ruta users en la constante routeUsers
+const routerRestaurants = require("./routes/restaurants.js"); // Idem routerRestaurants
+const routerExcursiones = require("./routes/excursiones.js"); // Idem routerExcursiones
+const routerHoteles = require("./routes/hoteles.js"); // Idem routerHoteles
+const routerReservas = require("./routes/reservas.js"); // Idem routerReservas
 
-// importación de rutas
+app.use(cors()); // Implementamos las funciones de cors dentro de app
+app.use(express.json()); // Implementamos la lectura Json dentro de app
+app.use("/api/users", routerUsers); // Declaramos la ruta /api/users para routerUsers
+app.use("/api/restaurants", routerRestaurants); // Declaramos la ruta /api/restaurants para routerRestaurants
+app.use("/api/excursiones", routerExcursiones); // Declaramos la ruta /api/excursiones para routerExcursiones
+app.use("/api/hoteles", routerHoteles); // Declaramos la ruta /api/hoteles para routerHoteles
+app.use("/api/reservas", routerReservas); // Declaramos la ruta /api/reservas pra routerReservas
 
-const routerUsers = require("./routes/users.js");
-const routerRestaurants = require("./routes/restaurants.js");
-const routerExcursiones = require("./routes/excursiones.js");
-const routerHoteles = require("./routes/hoteles.js");
-const routerReservas = require("./routes/reservas.js");
-
-app.use(cors());
-app.use(express.json());
-app.use("/api/users", routerUsers);
-app.use("/api/restaurants", routerRestaurants);
-app.use("/api/excursiones", routerExcursiones);
-app.use("/api/hoteles", routerHoteles);
-app.use("/api/reservas", routerReservas);
-// mensaje
-
-app.get("/", (req,res) => {
-    res.send("Turismo Ushuaia")
+app.get("/", (req,res) => { // Solicitud GET a la ruta principal de app
+    res.send("Turismo Ushuaia") // Responde con un mensaje "Turismo Ushuaia"
 })
 
-// definición de puerto de conexión
+const port = 3202; // Creamos una constante que almacena el puerto de conexión
 
-const port = 3202;
 
-// mensaje si la conexión al puerto es exitosa
 
-app.listen(port, () => {
-    console.log("Servidor en puerto: " + port)
+app.listen(port, () => { // Cuando app este escuchando, asignamos que sea en port (3202)
+    console.log("Servidor en puerto: " + port) // Si escucha el puerto con exito, se muestra un mensaje en consola
 })
