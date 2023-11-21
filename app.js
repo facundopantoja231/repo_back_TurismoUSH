@@ -22,8 +22,6 @@ app.get("/", (req,res) => { // Solicitud GET a la ruta principal de app
 
 const port = 3202; // Creamos una constante que almacena el puerto de conexión
 
-
-
 app.listen(port, () => { // Cuando app este escuchando, asignamos que sea en port (3202)
     console.log("Servidor en puerto: " + port) // Si escucha el puerto con exito, se muestra un mensaje en consola
 })

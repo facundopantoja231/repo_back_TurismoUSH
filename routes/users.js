@@ -32,23 +32,36 @@ routerUsers.post("/register", (req, res) => { // Solicitud POST a la ruta /regis
     const correoElectronico = req.body.correoElectronico; // Idem "correoElectronico"
     const nombreUsuario = req.body.nombreUsuario; // Idem "nombreUsuario"
     const contraseña = req.body.contraseña; // Idem "contraseña"
-    
-    // Le pedimos a la bd insertar en la tabla usuarios los valores que declaramos anteriormente
-    // El campo role siempre va a ser 'user'
 
-    conexion.query("INSERT INTO usuarios (nombre, apellido, correoElectronico, nombreUsuario, contraseña, role) VALUES (?, ?, ?, ?, ?, ?)", [nombre, apellido, correoElectronico, nombreUsuario, contraseña, 'user'], (err, result) => {
-        
-        // Si hubo un error al insertar los datos........
+
+    conexion.query("SELECT * FROM usuarios WHERE nombreUsuario = ?", [nombreUsuario], (err, result) => {
         if(err) {
-            console.log(err); // Muestra en consola el error
-            res.status(500).json({ error: "Error al obtener datos de usuarios" }); // Status 500 (server error)
-        } 
+            console.log(err)
+        } else {
+            if(result.length > 0) {
+                res.status(400).json({error: "El nombre de usuario ya existe"})
+            } else {
+                
+                // Le pedimos a la bd insertar en la tabla usuarios los valores que declaramos anteriormente
+                // El campo role siempre va a ser 'user'
+
+                conexion.query("INSERT INTO usuarios (nombre, apellido, correoElectronico, nombreUsuario, contraseña, role) VALUES (?, ?, ?, ?, ?, ?)", [nombre, apellido, correoElectronico, nombreUsuario, contraseña, 'user'], (err, result) => {
         
-        // Si no hubo errores........
-        else {
-            res.send(result) // Enviamos los datos a la BD
+                    // Si hubo un error al insertar los datos........
+                    if(err) {
+                        console.log(err); // Muestra en consola el error
+                        res.status(500).json({ error: "Error al obtener datos de usuarios" }); // Status 500 (server error)
+                    } 
+        
+                    // Si no hubo errores........
+                    else {
+                    res.send(result) // Enviamos los datos a la BD
+                    }
+                })
+            }
         }
     })
+    
 })
 
 
