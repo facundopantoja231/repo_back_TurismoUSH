@@ -23,6 +23,7 @@ routerUsers.get("/", (req, res) => { // Solicitud GET a la ruta principal de rou
 });
 
 
+
 routerUsers.post("/register", (req, res) => { // Solicitud POST a la ruta /register de routerUsers
 // Queda como "http://localhost:3202/api/users/register"
 
@@ -51,6 +52,7 @@ routerUsers.post("/register", (req, res) => { // Solicitud POST a la ruta /regis
 })
 
 
+
 routerUsers.post("/login", (req,res) => { // Solicitud POST a la ruta /login de routerUsers
 // Queda como "http://localhost:3202/api/users/login"
 
@@ -74,7 +76,7 @@ routerUsers.post("/login", (req,res) => { // Solicitud POST a la ruta /login de 
         }
             const token = jwt.sign( tokenValores, "Stack", { // Creamos el token y le pasamos tokenValores
                 // el token encriptara los valores nombreUsuario y role ya que son los q pasamos en tokenValores
-                expiresIn: "30m" // Aclaramos que el token expirará en 30 minutos.
+                expiresIn: "30min" // Aclaramos que el token expirará en 30 minutos.
             })
             res.send( {token} ) // Enviamos el token como objeto
         }
@@ -85,6 +87,5 @@ routerUsers.post("/login", (req,res) => { // Solicitud POST a la ruta /login de 
     }
     })
 })
-
 
 module.exports = routerUsers; // Permite que podamos usar routerUsers en los demas archivos.

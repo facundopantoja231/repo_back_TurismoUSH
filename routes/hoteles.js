@@ -22,66 +22,77 @@ routerHoteles.get("/table-hotel", (req, res) => {
   });
 });
 
+
+
 // Solicitud POST en la direccion /create-hotel (Queda como http://localhost:3202/api/hoteles/create-table)
 routerHoteles.post("/create-hotel", (req, res) => { 
+  const nombre_hotel= req.body.nombre_hotel; // Guardamos en la constante "nombre_hotel" el valor recibido desde el frontend
+  const descripcion_hotel = req.body.descripcion_hotel; // Idem "descripcion_hotel"
+  const direccion_hotel = req.body.direccion_hotel; // Idem "direccion_hotel"
+  const url_hotel = req.body.url_hotel; // Idem "url_hotel"
+  const telefono_hotel = req.body.telefono_hotel; // Idem "telefono_hotel"
 
-    const nombre_hotel= req.body.nombre_hotel; 
-    const descripcion_hotel = req.body.descripcion_hotel;
-    const direccion_hotel = req.body.direccion_hotel;
-    const url_hotel = req.body.url_hotel;
-    const telefono_hotel = req.body.telefono_hotel;
-
-    conexion.query("INSERT INTO hoteles (nombre_hotel, descripcion_hotel, direccion_hotel, url_hotel, telefono_hotel) VALUES (?, ?, ?, ?,?)", [nombre_hotel, descripcion_hotel, direccion_hotel, url_hotel,telefono_hotel], (err, result) => {
-        if(result) {
-            res.send(result);
-        }else{
-            res.send({message: "Ingresa los registros faltantes!"})
-        }
-    })
-
-
+  // Le pedimos a la bd insertar los valores declarados anteriormente a la tabla hoteles
+  conexion.query("INSERT INTO hoteles (nombre_hotel, descripcion_hotel, direccion_hotel, url_hotel, telefono_hotel) VALUES (?, ?, ?, ?,?)", [nombre_hotel, descripcion_hotel, direccion_hotel, url_hotel,telefono_hotel], (err, result) => {
+      
+    // Si no hay errores...
+    if(result) {
+          res.send(result); // Insertamos los datos en la tabla
+      }
+      
+      // Si hay errores....
+      else{
+          res.send({message: "Ingresa los registros faltantes!"}) // Mostramos en el servidor un mensaje de error
+      }
+  })
 })
 
 
 
-
-
-// Esta es la logica que permite modificar los registros en la interfaz de administración
-// Metodo PUT en la dirección /modify-res
+// Solicitud PUT en la direccion /modify-hotel (Queda como http://localhost:3202/api/hoteles/modify-hotel)
 routerHoteles.put("/modify-hotel", (req, res) => {
-  const id = req.body.id;
-  const nombre_hotel= req.body.nombre_hotel;
-  const descripcion_hotel = req.body.descripcion_hotel;
-  const direccion_hotel = req.body.direccion_hotel;
-  const url_hotel = req.body.url_hotel;
-  const telefono_hotel = req.body.telefono_hotel;
+  const id = req.body.id; // Guardamos en una constante "id" el valor recibido desde el frontend
+  const nombre_hotel= req.body.nombre_hotel; // Idem "nombre_hotel"
+  const descripcion_hotel = req.body.descripcion_hotel; // Idem "descripcion_hotel"
+  const direccion_hotel = req.body.direccion_hotel; // Idem "direccion_hotel"
+  const url_hotel = req.body.url_hotel; // Idem "url_hotel"
+  const telefono_hotel = req.body.telefono_hotel; // Idem "telefono_hotel"
 
+  // Le pedimos a la bd que actualize los datos antiguos por los nuevos datos que ingreso el usuario
   conexion.query("UPDATE hoteles SET nombre_hotel=?, descripcion_hotel=?, direccion_hotel=?, url_hotel=?, telefono_hotel=? WHERE id=?", [nombre_hotel, descripcion_hotel, direccion_hotel, url_hotel, telefono_hotel,id], (err, result) => {
+    
+    // Si la solicitud se realiza con exito....
     if(result) {
-      res.send("Hotel actualizado con exito");
-    }else{
-      res.send({message: "Ingresa los registros faltantes!", err})
+      res.send("Hotel actualizado con exito"); // Se muestra un mensaje de exito en el servidor
+    }
+    
+    // Si la solicitud no se realiza con exito.....
+    else{
+      res.send({message: "Ingresa los registros faltantes!", err}) // Muestra en el servidor un mensaje de error
   }
   })
 })
 
-// Esta es la logica que permite eliminar registros de la base de datos
-// Metodo DELETE en direccion /delete-res
+
+
+// Solicitud DELETE en la direccion /delete-hotel/:id (Queda como http://localhost:3202/api/hoteles/delete-hotel/:id)
 routerHoteles.delete("/delete-hotel/:id", (req, res) => {
 
-const id = req.params.id;
+  const id = req.params.id; // Obtenemos el parametro id desde el frontend y lo declaramos en una constante "id"
 
-conexion.query("DELETE FROM hoteles WHERE id=?", id, (err, result) => {
-  if(err) {
-    console.log(err)
-  } else {
-    res.send(result)
-  }
+  // Le pedimos a la bd que elimine los registros del id seleccionado en la tabla hoteles
+  conexion.query("DELETE FROM hoteles WHERE id=?", id, (err, result) => {
+
+    // Si hay errores...
+    if(err) {
+      console.log(err) // Muestra el error en la consola
+    } 
+
+    // Si no hay errores....
+    else {
+      res.send(result) // Elimina los registros de la tabla hoteles
+    }
+  })
 })
-})
 
-
-
-// exportamos routersHoteles para mostrarlo y ejecutarlo desde app.js
-
-module.exports = routerHoteles;
+module.exports = routerHoteles; // Permite que podamos usar routerHoteles en los demas archivos.
