@@ -1,6 +1,6 @@
 const express = require("express") // Importamos express
 const conexion = require("../conexion") // Importamos conexion (la bd)
-const nodemailer = require("nodemailer")
+const nodemailer = require("nodemailer")// Importamos nodemailer(email)
 
 const routerReservas = express.Router() // declaramos la ruta routerReservas. En app dijimos que es /api/reservas
 
@@ -13,7 +13,6 @@ routerReservas.post("/", (req, res) => { // Solicitud POST a la direccion / de r
     const correo_electronico = req.body.correo_electronico; // Idem "correo_electronico"
     const telefono = req.body.telefono; // Idem "telefono"
     const id_excursion = req.body.id_excursion; // Idem "id_excursion"
-    const excursionReservada = req.body.excursionReservada;
 
     // Le pedimos a la bd que inserte en la tabla reservas los valores declarados anteriormente
     conexion.query("INSERT INTO reservas (nombre, apellido, correo_electronico, telefono, id_excursion) VALUES (?, ?, ?, ?, ?)", [nombre, apellido, correo_electronico, telefono, id_excursion], (err, result) => {
