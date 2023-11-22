@@ -73,9 +73,10 @@ routerExcursiones.post("/create-exc", (req, res) => {
   const ambiente = req.body.ambiente; // Idem "ambiente"
   const forma_de_pago = req.body.forma_de_pago; // Idem "forma_de_pago"
   const minimo_de_participantes = req.body.minimo_de_participantes; // Idem "minimo_de_participantes"
+  const fecha = req.body.fecha // Idem "fecha"
 
   // Le pedimos a la bd insertar todos los datos obtenidos del front a la tabla excursiones
-  conexion.query("INSERT INTO excursiones (excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes], (err, result) => {
+  conexion.query("INSERT INTO excursiones (excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes, fecha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes, fecha], (err, result) => {
       
     // Si hay errores....
     if(err) {
@@ -108,9 +109,10 @@ routerExcursiones.put("/modify-exc", (req, res) => {
   const ambiente = req.body.ambiente; // Idem "ambiente"
   const forma_de_pago = req.body.forma_de_pago; // Idem "forma_de_pago"
   const minimo_de_participantes = req.body.minimo_de_participantes; // Idem "minimo_de_participantes"
+  const fecha = req.body.fecha; // Idem "minimo_de_participantes"
     
   // Le pedimos a la bd que actualice los datos antiguos de la tabla excursiones por los nuevos ingresados por el usuario
-  conexion.query("UPDATE excursiones SET excursion=?, descripcion_exc=?, precio=?, urlImagen_exc=?, cupos=?, horarios=?, duracion=?, dificultad=?, idioma=?, traslados=?, disponible=?, ambiente=?, forma_de_pago=?, minimo_de_participantes=? WHERE id=?", [excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes, id], (err, result) => {
+  conexion.query("UPDATE excursiones SET excursion=?, descripcion_exc=?, precio=?, urlImagen_exc=?, cupos=?, horarios=?, duracion=?, dificultad=?, idioma=?, traslados=?, disponible=?, ambiente=?, forma_de_pago=?, minimo_de_participantes=?, fecha=? WHERE id=?", [excursion, descripcion_exc, precio, urlImagen_exc, cupos, horarios, duracion, dificultad, idioma, traslados, disponible, ambiente, forma_de_pago, minimo_de_participantes, fecha, id], (err, result) => {
     
     // Si la solicitud SQL se hizo con exito.....
     if(result) {

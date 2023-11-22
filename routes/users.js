@@ -4,10 +4,6 @@ const jwt = require("jsonwebtoken") // Importamos JsonWebToken para crear el tok
 
 const routerUsers = express.Router() // declaramos la ruta routerUsers. En app dijimos que es /api/users
 
-
-
-
-
 routerUsers.post("/register", (req, res) => { // Solicitud POST a la ruta /register de routerUsers
 // Queda como "http://localhost:3202/api/users/register"
 
@@ -47,8 +43,6 @@ routerUsers.post("/register", (req, res) => { // Solicitud POST a la ruta /regis
     })
     
 })
-
-
 
 routerUsers.post("/login", (req,res) => { // Solicitud POST a la ruta /login de routerUsers
 // Queda como "http://localhost:3202/api/users/login"
