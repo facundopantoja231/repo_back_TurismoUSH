@@ -5,22 +5,6 @@ const jwt = require("jsonwebtoken") // Importamos JsonWebToken para crear el tok
 const routerUsers = express.Router() // declaramos la ruta routerUsers. En app dijimos que es /api/users
 
 
-routerUsers.get("/", (req, res) => { // Solicitud GET a la ruta principal de routerUsers
-
-    // Le pedimos a la bd todos los registros de la tabla usuarios
-    conexion.query("SELECT * FROM usuarios", (err, result) => {
-        
-        // Si hay un error.......
-        if (err) {
-            console.error(err); // Muestra en consola el error
-            res.status(500).json({ error: "Error al obtener datos de usuarios" }); // Status 500 (server error)
-        } 
-        // Si no hay errores......
-        else {
-            res.status(200).json(result);  // enviamos los datos en formato JSON con status 200 (solicitud exitosa)
-        }
-    });
-});
 
 
 
